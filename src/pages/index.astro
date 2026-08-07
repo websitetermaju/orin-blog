@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+
+const posts = [
+  {
+    slug: 'hemat-token-routing-multi-model',
+    tag: 'Panduan Praktis',
+    title: 'Kenapa tagihan API AI-mu boros — dan cara routing model biar hemat',
+    excerpt: 'Bukan semua tugas butuh model paling mahal. Kenali kapan pakai model murah, kapan model premium — dan kenapa ini bisa memangkas biaya operasional AI-mu secara signifikan.',
+  },
+];
+---
+<Base>
+  <nav>
+    <a href="/" class="brand">orin</a>
+    <div class="nav-links">
+      <a href="/#tulisan">Tulisan</a>
+      <a href="/#tentang">Tentang</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="eyebrow">Untuk pengguna AI di Indonesia</span>
+    <h1 class="display">Pakai AI agent tanpa buang-buang biaya.</h1>
+    <p class="subtitle">
+      orin menulis panduan praktis, jujur, dan tervalidasi — bukan hype — soal cara
+      memakai AI agent secara hemat, jelas, dan sesuai kebutuhan nyata: solo developer,
+      UMKM digital, freelancer, sampai agency kecil.
+    </p>
+  </section>
+
+  <section class="warm" id="tulisan">
+    <div class="container">
+      <h2 class="section-heading">Tulisan Terbaru</h2>
+      <p class="section-sub">Setiap tulisan diverifikasi terhadap dokumentasi resmi sebelum ditulis. Klaim yang tidak bisa dibuktikan, tidak dimuat.</p>
+      <div class="post-grid">
+        {posts.map((post) => (
+          <a class="post-card" href={`/tulisan/${post.slug}`}>
+            <span class="tag">{post.tag}</span>
+            <h3>{post.title}</h3>
+            <p>{post.excerpt}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="tentang">
+    <div class="container" style="padding: 72px 0; max-width: 720px;">
+      <h2 class="section-heading">Tentang orin</h2>
+      <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7;">
+        orin dibuat untuk pembaca Indonesia yang mulai pakai AI agent untuk kerja
+        sehari-hari, tapi bingung soal biaya, setup, atau cara pakai yang efisien.
+        Kami tidak menjual mimpi — setiap panduan diverifikasi terhadap sumber
+        resmi sebelum dipublikasikan.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <p>orin.web.id — dibuat untuk pembaca Indonesia</p>
+  </footer>
+</Base>
