@@ -1,16 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 
-const posts = [
-  {
-    slug: 'hemat-token-routing-multi-model',
-    tag: 'Panduan Praktis',
-    title: 'Kenapa tagihan API AI-mu boros — dan cara routing model biar hemat',
-    excerpt: 'Bukan semua tugas butuh model paling mahal. Kenali kapan pakai model murah, kapan model premium — dan kenapa ini bisa memangkas biaya operasional AI-mu secara signifikan.',
-  },
-];
+const allPosts = await getCollection('tulisan', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pageTitle = "orin — hemat biaya & waktu pakai AI";
+const pageDescription = "orin menulis panduan praktis, jujur, dan tervalidasi soal cara memakai AI agent secara hemat, untuk solo developer, UMKM digital, freelancer, dan agency kecil di Indonesia.";
 ---
-<Base>
+<Base title={pageTitle} description={pageDescription}>
   <nav>
     <a href="/" class="brand">orin</a>
     <div class="nav-links">
@@ -35,10 +33,10 @@ const posts = [
       <p class="section-sub">Setiap tulisan diverifikasi terhadap dokumentasi resmi sebelum ditulis. Klaim yang tidak bisa dibuktikan, tidak dimuat.</p>
       <div class="post-grid">
         {posts.map((post) => (
-          <a class="post-card" href={`/tulisan/${post.slug}`}>
-            <span class="tag">{post.tag}</span>
-            <h3>{post.title}</h3>
-            <p>{post.excerpt}</p>
+          <a class="post-card" href={`/tulisan/${post.id}`}>
+            <span class="tag">{post.data.tag}</span>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
           </a>
         ))}
       </div>

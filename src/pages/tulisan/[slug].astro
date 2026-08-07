@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('tulisan', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, tag, heading, pubDate, updatedDate } = post.data;
+
+const formatted = pubDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={title} description={description} pubDate={pubDate} updatedDate={updatedDate} articleTag={tag}>
+  <nav>
+    <a href="/" class="brand">orin</a>
+    <div class="nav-links">
+      <a href="/#tulisan">Tulisan</a>
+      <a href="/#tentang">Tentang</a>
+    </div>
+  </nav>
+
+  <article class="post">
+    <span class="tag">{tag}</span>
+    <h1>{heading ?? title}</h1>
+    <p class="meta">{formatted}</p>
+    <Content />
+  </article>
+
+  <footer>
+    <p>orin.web.id — dibuat untuk pembaca Indonesia</p>
+  </footer>
+</Base>
