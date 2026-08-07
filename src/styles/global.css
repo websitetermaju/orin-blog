@@ -184,6 +184,36 @@ footer {
   font-size: 14px;
 }
 
+.subscribe {
+  background: var(--bg-warm);
+  padding: 72px 24px;
+  border-top: 1px solid var(--border);
+}
+.subscribe .container { max-width: 640px; }
+.subscribe-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.subscribe-form input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+}
+.subscribe-form input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+.subscribe-msg { margin-top: 16px; font-size: 15px; color: var(--text-secondary); }
+.subscribe-msg.success { color: #1a7f37; }
+.subscribe-msg.error { color: #cf222e; }
+@media (max-width: 480px) {
+  .subscribe-form { flex-direction: column; }
+}
+
 article.post {
   max-width: 720px;
   margin: 0 auto;

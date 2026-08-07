@@ -43,6 +43,18 @@ const pageDescription = "Orin.ai menulis panduan praktis, jujur, dan tervalidasi
     </div>
   </section>
 
+  <section class="subscribe" id="subscribe">
+    <div class="container">
+      <h2 class="section-heading">Dapatkan PDF Gratis: 10 Prompt Hemat Token</h2>
+      <p class="section-sub">Kirim email kamu, langsung terima lead magnet + update artikel baru tiap minggu.</p>
+      <form id="subscribe-form" class="subscribe-form" novalidate>
+        <input type="email" id="subscribe-email" name="email" placeholder="email@contoh.com" required />
+        <button type="submit" class="btn-primary">Kirim</button>
+      </form>
+      <p id="subscribe-msg" class="subscribe-msg" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
   <section id="tentang">
     <div class="container" style="padding: 112px 0; max-width: 720px;">
       <h2 class="section-heading">Tentang Orin.ai</h2>
@@ -59,3 +71,39 @@ const pageDescription = "Orin.ai menulis panduan praktis, jujur, dan tervalidasi
     <p>Orin.ai — dibuat untuk pembaca Indonesia</p>
   </footer>
 </Base>
+
+<script>
+  const form = document.getElementById('subscribe-form');
+  const msg = document.getElementById('subscribe-msg');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('subscribe-email').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Email tidak valid.';
+        msg.className = 'subscribe-msg error';
+        return;
+      }
+      msg.textContent = 'Mengirim...';
+      msg.className = 'subscribe-msg';
+      try {
+        const res = await fetch('https://otomasi.nrds.web.id/webhook/orin-subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        if (res.ok) {
+          msg.textContent = 'Terima kasih! Cek email kamu untuk PDF gratis.';
+          msg.className = 'subscribe-msg success';
+          form.reset();
+        } else {
+          msg.textContent = 'Gagal mengirim. Coba lagi nanti.';
+          msg.className = 'subscribe-msg error';
+        }
+      } catch (err) {
+        msg.textContent = 'Gagal mengirim. Coba lagi nanti.';
+        msg.className = 'subscribe-msg error';
+      }
+    });
+  }
+</script>
