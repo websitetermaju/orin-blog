@@ -5,12 +5,12 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('tulisan', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const pageTitle = "orin — hemat biaya & waktu pakai AI";
-const pageDescription = "orin menulis panduan praktis, jujur, dan tervalidasi soal cara memakai AI agent secara hemat, untuk solo developer, UMKM digital, freelancer, dan agency kecil di Indonesia.";
+const pageTitle = "Orin.ai — hemat biaya & waktu pakai AI";
+const pageDescription = "Orin.ai menulis panduan praktis, jujur, dan tervalidasi soal cara memakai AI agent secara hemat, untuk solo developer, UMKM digital, freelancer, dan agency kecil di Indonesia.";
 ---
 <Base title={pageTitle} description={pageDescription}>
   <nav>
-    <a href="/" class="brand">orin</a>
+    <a href="/" class="brand"><img src="/images/logo-orin-ai.png" alt="Orin.ai" height="28" style="display:block;height:28px;width:auto;" /></a>
     <div class="nav-links">
       <a href="/#tulisan">Tulisan</a>
       <a href="/#tentang">Tentang</a>
@@ -21,7 +21,7 @@ const pageDescription = "orin menulis panduan praktis, jujur, dan tervalidasi so
     <span class="eyebrow">Untuk pengguna AI di Indonesia</span>
     <h1 class="display">Pakai AI agent tanpa buang-buang biaya.</h1>
     <p class="subtitle">
-      orin menulis panduan praktis, jujur, dan tervalidasi — bukan hype — soal cara
+      Orin.ai menulis panduan praktis, jujur, dan tervalidasi — bukan hype — soal cara
       memakai AI agent secara hemat, jelas, dan sesuai kebutuhan nyata: solo developer,
       UMKM digital, freelancer, sampai agency kecil.
     </p>
@@ -45,9 +45,9 @@ const pageDescription = "orin menulis panduan praktis, jujur, dan tervalidasi so
 
   <section id="tentang">
     <div class="container" style="padding: 72px 0; max-width: 720px;">
-      <h2 class="section-heading">Tentang orin</h2>
+      <h2 class="section-heading">Tentang Orin.ai</h2>
       <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7;">
-        orin dibuat untuk pembaca Indonesia yang mulai pakai AI agent untuk kerja
+        Orin.ai dibuat untuk pembaca Indonesia yang mulai pakai AI agent untuk kerja
         sehari-hari, tapi bingung soal biaya, setup, atau cara pakai yang efisien.
         Kami tidak menjual mimpi — setiap panduan diverifikasi terhadap sumber
         resmi sebelum dipublikasikan.
@@ -56,6 +56,6 @@ const pageDescription = "orin menulis panduan praktis, jujur, dan tervalidasi so
   </section>
 
   <footer>
-    <p>orin.web.id — dibuat untuk pembaca Indonesia</p>
+    <p>Orin.ai — dibuat untuk pembaca Indonesia</p>
   </footer>
 </Base>
