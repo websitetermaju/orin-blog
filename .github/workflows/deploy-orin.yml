@@ -1,0 +1,78 @@
+name: Deploy ORIN to SumoPod VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: orin-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Build static site
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build
+          test -s dist/index.html
+          test "$(find dist -type f | wc -l)" -gt 5
+
+      - name: Configure restricted deploy key
+        env:
+          ORIN_DEPLOY_KEY: ${{ secrets.ORIN_DEPLOY_KEY }}
+          ORIN_KNOWN_HOSTS: ${{ secrets.ORIN_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 ~/.ssh
+          printf '%s\n' "$ORIN_DEPLOY_KEY" > ~/.ssh/orin_deploy
+          printf '%s\n' "$ORIN_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 0600 ~/.ssh/orin_deploy ~/.ssh/known_hosts
+
+      - name: Deploy immutable release
+        env:
+          ORIN_DEPLOY_HOST: ${{ secrets.ORIN_DEPLOY_HOST }}
+        run: |
+          set -euo pipefail
+          tar -C dist -czf /tmp/orin-release.tgz .
+          (
+            printf 'ORIN_DEPLOY_V1 %s\n' "$GITHUB_SHA"
+            cat /tmp/orin-release.tgz
+          ) | ssh -i ~/.ssh/orin_deploy \
+              -o IdentitiesOnly=yes \
+              -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes \
+              "orin-deploy@$ORIN_DEPLOY_HOST"
+
+      - name: Verify public site
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5 6; do
+            body=$(mktemp)
+            code=$(curl --silent --show-error --location \
+              --output "$body" --write-out '%{http_code}' \
+              --max-time 20 "https://orin.web.id/?deploy=$GITHUB_SHA")
+            if [ "$code" = 200 ] && grep -q '<title>Orin' "$body"; then
+              echo "ORIN public smoke PASS on attempt $attempt"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'ORIN public smoke FAILED' >&2
+          exit 1
