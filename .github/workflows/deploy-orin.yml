@@ -1,4 +1,4 @@
-name: Deploy ORIN to SumoPod VPS
+name: Deploy ORIN to WebsiteTermaju App VPS
 
 on:
   push:
